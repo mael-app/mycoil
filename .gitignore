@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# SvelteKit and Vite
+.svelte-kit/
+build/
+dist/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Hosting and tooling
+.vercel/
+.netlify/
+.DS_Store
+*.log
+
+# Editor files
+.idea/
+.vscode/
+*.swp
