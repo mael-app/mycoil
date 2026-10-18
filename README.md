@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-Copy `.env.example` to `.env` when Supabase credentials are available. The current app works locally with browser persistence.
+Copy `.env.example` to `.env` with your Supabase project URL and publishable key. Without Supabase credentials, the app falls back to browser persistence. With an authenticated user, plans and history sync across devices.
 
 Run `supabase/schema.sql` in the Supabase SQL editor before connecting a project.
 
