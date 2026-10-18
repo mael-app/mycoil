@@ -93,7 +93,6 @@
   <header class="topbar">
     <a class="brand" href="/" aria-label="mycoil home"><span class="brand-mark"><Zap size={17} strokeWidth={2.8} /></span><span>mycoil</span></a>
     <div class="topbar-actions">
-      {#if state}<button class="icon-button" aria-label="Open settings" onclick={openSetup}><Settings2 size={20} /></button>{/if}
       <button class="account-button" aria-label={user ? 'Open account' : 'Sign in'} onclick={openAuth}>{#if user}<span>{user.email?.slice(0, 1).toUpperCase()}</span>{:else}<UserRound size={18} />{/if}</button>
     </div>
   </header>
@@ -109,7 +108,7 @@
     </main>
   {:else}
     <main class="main-content" in:fade={{ duration: 260 }}>
-      <div class="greeting-row"><div><p class="eyebrow">{formatLongDate(now.toISOString())}</p><h1>Good morning<span class="accent">.</span></h1></div><div class="avatar">M</div></div>
+       <div class="greeting-row"><div><p class="eyebrow">{formatLongDate(now.toISOString())}</p><h1>Good morning<span class="accent">.</span></h1></div></div>
 
       <section class:status-due={due} class:status-postponed={postponed} class="status-card">
         <div class="status-top"><span class="status-label"><span class="status-pulse"></span>{due ? 'Action needed' : postponed ? 'Reminder snoozed' : 'On track'}</span><span class="status-icon">{#if due}<Flame size={20} />{:else}<Check size={20} />{/if}</span></div>
