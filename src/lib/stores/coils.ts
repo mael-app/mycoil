@@ -17,7 +17,9 @@ function addDays(date: Date, days: number) {
 function createInitialState(): CoilState | null {
   if (!browser) return null;
   const stored = localStorage.getItem(STORAGE_KEY);
-  return stored ? JSON.parse(stored) : null;
+  if (!stored) return null;
+  const state = JSON.parse(stored) as CoilState;
+  return { ...state, lastNotifiedAt: state.lastNotifiedAt ?? null };
 }
 
 export const coilState = writable<CoilState | null>(createInitialState());
@@ -37,6 +39,7 @@ function settingsRow(state: CoilState, userId: string) {
     next_change_at: state.nextChangeAt,
     interval_days: state.intervalDays,
     postpone_until: state.postponeUntil,
+    last_notified_at: state.lastNotifiedAt,
     updated_at: new Date().toISOString()
   };
 }
@@ -77,6 +80,7 @@ async function loadRemoteState(user: User) {
       nextChangeAt: settings.next_change_at,
       intervalDays: Number(settings.interval_days),
       postponeUntil: settings.postpone_until,
+      lastNotifiedAt: settings.last_notified_at,
       events: (events ?? []).map((event) => ({
         id: event.id,
         type: event.type,
@@ -151,6 +155,7 @@ export function createPlan(coilCount: number, deadline: string) {
     nextChangeAt: addDays(now, intervalDays),
     intervalDays,
     postponeUntil: null,
+    lastNotifiedAt: null,
     events: []
   });
 }
@@ -171,6 +176,7 @@ export function changeCoil() {
       nextChangeAt: addDays(now, intervalDays),
       intervalDays,
       postponeUntil: null,
+      lastNotifiedAt: null,
       events: [event, ...state.events]
     };
   });
@@ -183,7 +189,7 @@ export function postponeChange() {
     const next = new Date(state.nextChangeAt);
     const nextChangeAt = addDays(next, 1);
     const event: CoilEvent = { id: crypto.randomUUID(), type: 'postpone', occurredAt: now.toISOString() };
-    return { ...state, nextChangeAt, postponeUntil: addDays(now, 1), events: [event, ...state.events] };
+    return { ...state, nextChangeAt, postponeUntil: addDays(now, 1), lastNotifiedAt: null, events: [event, ...state.events] };
   });
 }
 
@@ -200,7 +206,7 @@ export function updateDeadline(deadline: string) {
     if (!state) return state;
     const now = new Date();
     const intervalDays = daysBetween(now, new Date(deadline)) / Math.max(1, state.coilCount);
-    return { ...state, deadline: new Date(deadline).toISOString(), intervalDays, nextChangeAt: addDays(now, intervalDays) };
+    return { ...state, deadline: new Date(deadline).toISOString(), intervalDays, nextChangeAt: addDays(now, intervalDays), lastNotifiedAt: null };
   });
 }
 

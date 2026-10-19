@@ -1,0 +1,2 @@
+[functions.send-coil-notifications]
+verify_jwt = false

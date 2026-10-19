@@ -15,5 +15,6 @@ export type CoilState = {
   nextChangeAt: string;
   intervalDays: number;
   postponeUntil: string | null;
+  lastNotifiedAt: string | null;
   events: CoilEvent[];
 };
